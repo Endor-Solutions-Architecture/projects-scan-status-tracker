@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "8501:8501"
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+
+# Comment below Nginx section if you do not plan on using certificates and nginx
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./certs:/certs:ro
+    depends_on:
+      - app
+    restart: always
